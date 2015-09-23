@@ -5,9 +5,9 @@ Install the Watcher module
      -   rabbitmq,
      -   keystone,
      -   console,
-     -   watcher-api,
-     -   watcher-decision-engine,
-     -   watcher-applier,
+     -   api,
+     -   decision-engine,
+     -   applier,
      -   horizon (including Watcher plugin)
 
 

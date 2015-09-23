@@ -1,7 +1,7 @@
 # Docker Compose to test metering agents and publishers
 # Fabrice BARANSKI  <fabrice.baranski@b-com.com>
 
-watcher-metering-agent:
+metering-agent:
   labels:
     vendor: B<>COM
     com.b-com.watcher.description: "Watcher Metering Agent"
@@ -17,7 +17,7 @@ watcher-metering-agent:
     file: ../service_discovery/settings.yml
     service: registry-node
 
-watcher-metering-publisher:
+metering-publisher:
   labels:
     vendor: B<>COM
     com.b-com.watcher.description: "Watcher Metering Publisher"
@@ -35,7 +35,7 @@ watcher-metering-publisher:
     file: ../service_discovery/settings.yml
     service: registry-node
   # ports:
-  #   - 12345:12345
+  #   - "12345:12345"
 
 nanoconfig-server:
   labels:
@@ -48,8 +48,8 @@ nanoconfig-server:
     SERVICE_10900_NAME: nanoconfig
   # WATCHER_METERING_PUBLISHER_ENDPOINT: tcp://192.168.1.30:12345
   # ports:
-  #   - 10800:10800
-  #   - 10900:10900
+  #   - "10800:10800"
+  #   - "10900:10900"
   extends:
     file: ../service_discovery/settings.yml
     service: registry-node
@@ -90,8 +90,8 @@ influxdb:
   volumes:
    - /opt/datanode
   ports:
-    - 8083
-    - 8086
+    - "8083"
+    - "8086"
   extends:
     file: ../service_discovery/settings.yml
     service: registry-node
@@ -110,7 +110,7 @@ grafana:
     # INFLUXDB_PASSWORD: root
     # INFLUXDB_DB: watcher_metrics  
   ports:
-    - 3000
+    - "3000"
   extends:
     file: ../service_discovery/settings.yml
     service: registry-node

@@ -11,12 +11,6 @@ mariadb:
   extends:
     file: ../service_discovery/settings.yml
     service: registry-node   
-  expose:
-    - "22"
-    - "3306"
-  ports:
-    - "10022:22/tcp"
-    - "13306:3306/tcp"
 
 rabbitmq:
   labels:
@@ -29,12 +23,6 @@ rabbitmq:
   extends:
     file: ../service_discovery/settings.yml
     service: registry-node
-  expose:
-    - "22"
-    - "5672"
-  ports:
-    - "10122:22/tcp"
-    - "15672:5672/tcp"
 
 keystone:
   labels:
@@ -47,22 +35,13 @@ keystone:
   extends:
     file: ../service_discovery/settings.yml
     service: registry-node
-  expose:
-    - "22"
-    - "5000"
-    - "35357"
-  ports:
-    - "10222:22/tcp"
-    - "5000:5000/tcp"
-    - "35357:35357/tcp"
-
 
 console:
   labels:
     vendor: B<>COM
     com.b-com.watcher.description: "Console"
   environment:
-    SERVICE_NAME: console
+    SERVICE_IGNORE: fake
     # KEYSTONE_NODE: 
     # KEYSTONE_ADMIN_TOKEN: 
     # KEYSTONE_SERVICE_TENANT_NAME: 
@@ -77,10 +56,6 @@ console:
   extends:
     file: ../service_discovery/settings.yml
     service: registry-node
-  expose:
-    - "22"
-  ports:
-    - "10322:22/tcp"
 
 api:
   labels:
@@ -99,11 +74,7 @@ api:
   extends:
     file: ../service_discovery/settings.yml
     service: registry-node
-  expose:
-    - "22"
-    - "9322"
   ports:
-    - "10422:22/tcp"
     - "9322:9322/tcp"
 
 decision-engine:
@@ -124,11 +95,6 @@ decision-engine:
   extends:
     file: ../service_discovery/settings.yml
     service: registry-node
-  expose:
-    - "22"
-  ports:
-    - "10522:22/tcp"
-
 
 applier:
   labels:
@@ -147,10 +113,6 @@ applier:
   extends:
     file: ../service_discovery/settings.yml
     service: registry-node
-  expose:
-    - "22"
-  ports:
-    - "10622:22/tcp"
 
 # horizon:
 #   labels:
@@ -165,11 +127,9 @@ applier:
 #     file: ../service_discovery/settings.yml
 #     service: registry-node
 #   expose:
-#     - "22"
 #     - "8000"
 #   ports:
 #     - "8000:8000"
-#     - "10722:22/tcp"
 
 # tempest:
 #   environment:
@@ -188,5 +148,3 @@ applier:
 #     - node.indeed.consul
 #   links:
 #     - serviceregistry:consul
-#   expose:
-#     - "22"
