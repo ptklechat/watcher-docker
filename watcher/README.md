@@ -1,8 +1,6 @@
 Install the Watcher module
 ==========================
-
-
--   WATCHER containers are:
+- __WATCHER__ containers are:
      -   mariadb,
      -   rabbitmq,
      -   keystone,
@@ -13,16 +11,19 @@ Install the Watcher module
      -   horizon (including Watcher plugin)
 
 
-The file *watcher-ti/docker-compose.xml* is a global orchestration template file. You can customize it in order to deploy and configure all containers or a part of them, according to your needs.
+The file *watcher/docker-compose.xml* is a global orchestration template file. You can customize it in order to deploy and configure all containers or a part of them, according to your needs.
+
+Unmodified, this template file deploys an autonomous integration testing environment for the watcher toolsuite, with its own keystone, rabbitmq, mariadb and horizon services. But with the following guidelines, you will be able to connect watcher to your own openstack (devstack, all-in-one openstack or any openstack system). All you need is to substitute keystone container by your own keystone service, and add a metering agent on your compute nodes that collects the metrics.
 
 Use DevStack Identity Service Keystone
 --------------------------------------
+Once your devstack is fully functionnal, you can substitute included keystone by devstack keystone:
 
 1. Edit the template file *docker-compose.yml*:
-
-       $ cd watcher
-       $ vi docker-compose.xml
-
+```sh
+    $ cd watcher
+    $ vi docker-compose.xml
+```
    and remove/comment the *keystone* service.
 
 2. in this file, set the next environment variables (you have to set them in several services): 
@@ -51,7 +52,6 @@ Use DevStack Identity Service Keystone
         $ openstack role add --project SERVICE_PROJECT_NAME --user watcher admin
      
    with:
-  
    - YOUR_WATCHER_PASSWORD: the user password
    - SERVICE_PROJECT_NAME: the keystone project name for services
 
@@ -64,17 +64,19 @@ Use DevStack Identity Service Keystone
         $ openstack service create --name watcher infra-optim 
 
 5. Create the endpoints:
-
-        $ keystone endpoint-create \
-          --service-id=the_service_id_above \
-          --publicurl=http://YOUR_WATCHER_API_IP:9322 \
-          --internalurl=http://YOUR_WATCHER_API_IP:9322 \
-          --adminurl=http://YOUR_WATCHER_API_IP:9322
-      or
-
-        $ openstack endpoint create --region YOUR_REGION watcher public http://YOUR_WATCHER_API_IP:9322 enal
-        $ openstack endpoint create --region YOUR_REGION watcher admin http://YOUR_WATCHER_API_IP:9322
-        $ openstack endpoint create --region YOUR_REGION watcher internal http://YOUR_WATCHER_API_IP:9322
+```sh
+$ keystone endpoint-create \
+  --service-id=the_service_id_above \
+  --publicurl=http://YOUR_WATCHER_API_IP:9322 \
+  --internalurl=http://YOUR_WATCHER_API_IP:9322 \
+  --adminurl=http://YOUR_WATCHER_API_IP:9322
+```          
+or
+```sh
+$ openstack endpoint create --region YOUR_REGION watcher public http://YOUR_WATCHER_API_IP:9322 enal
+$ openstack endpoint create --region YOUR_REGION watcher admin http://YOUR_WATCHER_API_IP:9322
+$ openstack endpoint create --region YOUR_REGION watcher internal http://YOUR_WATCHER_API_IP:9322
+```
    with:
    - YOUR_REGION: the OpenStack Region in which declare the watcher service
    - YOUR_WATCHER_API_IP: the Watcher service IP address (or FQDN)
@@ -94,30 +96,27 @@ Use DevStack SQL MariaDb database
       -   **MARIADB\_NODE**: DevStack MySQL server IP address.
 
 3. On DevStack, create the Watcher database, with these commands
-
-        $ mysql -u<mysql_user> -p<mysql_pwd> -e 'DROP DATABASE IF EXISTS watcher;'
-        $ mysql -u<mysql_user> -p<mysql_pwd> -e 'CREATE DATABASE watcher;'
-        $ mysql -u<mysql_user> -p<mysql_pwd> -e 'GRANT ALL PRIVILEGES ON watcher.* TO "watcher"@"localhost" IDENTIFIED BY "watcher";'
-        $ mysql -u<mysql_user> -p<mysql pwd> -e 'GRANT ALL PRIVILEGES ON watcher.* TO "watcher"@"%" IDENTIFIED BY "watcher";'
-
+```sh
+$ mysql -u<mysql_user> -p<mysql_pwd> -e 'DROP DATABASE IF EXISTS watcher;'
+$ mysql -u<mysql_user> -p<mysql_pwd> -e 'CREATE DATABASE watcher;'
+$ mysql -u<mysql_user> -p<mysql_pwd> -e 'GRANT ALL PRIVILEGES ON watcher.* TO "watcher"@"localhost" IDENTIFIED BY "watcher";'
+$ mysql -u<mysql_user> -p<mysql pwd> -e 'GRANT ALL PRIVILEGES ON watcher.* TO "watcher"@"%" IDENTIFIED BY "watcher";'
+```
 
 
 Use DevStack RabbitMQ server
 ----------------------------
 
 1. Edit the template file *docker-compose.yml*:
-
+```sh
        $ cd watcher
        $ vi docker-compose.xml
-
+```
    and remove/comment the *rabbitmq* service.
 
 
 2. In this file, set the next environment variable (you have to set it in several services): 
       -   **RABBITMQ\_NODE**: DevStack RabbitMQ server IP address.
-
-
-
 
 Debugging
 ---------
@@ -125,23 +124,21 @@ Debugging
 You can enable/disable debug and verbose mode, by setting these parameters:
 
 1. Edit the template file *docker-compose.yml*:
-
+```sh
        $ cd watcher
        $ vi docker-compose.xml
-
+```
 2. In this file, set the next environment variable (you can set them in several services): 
       -   **DEBUG\_MODE**: Debug mode (true|false, default is *false*)
       -   **VERBOSE\_MODE**: Verbose mode (true|false, default is *false*)
 
-
-
 Run Watcher
 ===========
 To start Watcher services, you can simply run this command: 
-
-  $ cd watcher
-  $ docker-compose up -d
-
+```sh
+$ cd watcher
+$ docker-compose up -d
+```
 
 Use Watcher
 ===========
@@ -149,24 +146,24 @@ Use Watcher
 You can use the *console* container to play with Watcher.
 
 1. Connect to the Watcher console container:
-
-        $ docker ps
+```sh
+$ docker ps
+```
 
 2. Get the *console* container ID and attach to it :
-
-        $ docker exec -it < watcher_console_container_ID > bash
+```sh
+$ docker exec -it < watcher_console_container_ID > bash
+```
    and use watcher CLI:
-
-        root@console:/# cd /root
-
-        root@console:/# source creds
-
-        root@console:~# watcher audit-list
-        +------+------+---------------------+-------+
-        | UUID | Type | Audit Template Name | State |
-        +------+------+---------------------+-------+
-        +------+------+---------------------+-------+
-
+```sh
+root@console:/# cd /root
+root@console:/# source creds
+root@console:~# watcher audit-list
++------+------+---------------------+-------+
+| UUID | Type | Audit Template Name | State |
++------+------+---------------------+-------+
++------+------+---------------------+-------+
+```
 Important notes
 ---------------
 

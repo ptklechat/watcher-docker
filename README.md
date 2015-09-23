@@ -13,17 +13,13 @@ Install devstack
 ----------------
 
 If you need to install DevStack, you can refer to this page : [DevStack - an OpenStack Community Production] (We recommend using a minimal install of Ubuntu or Fedora server in a new VM)
-
+``` sh
     $ git clone https://git.openstack.org/openstack-dev/devstack
-
     $ cd devstack
-
     $ git checkout stable/kilo 
-
     $ ./stack.sh
-
+```
 Note: If you deploy DevStack on a NATed virtual machine, don't forget to udpate the DevStack default configuration by setting, in the file *local.conf*, the HOST_IP parameter with the IP address on you physical machine. for more information, go to [DevStack Configuration].
-
 
 Install docker & docker compose
 -------------------------------
@@ -32,21 +28,19 @@ To install Docker, you can refer to this page : [Supported installation]
 and choose your distribution.
 
 1.  On Ubuntu simply do:
-
-        $ sudo apt-get install curl
-
-        $ curl -sSL https://get.docker.com | sh
-
+``` sh
+    $ sudo apt-get install curl
+    $ curl -sSL https://get.docker.com | sh
+```
 2.  To test your installation:
-
-        $ sudo docker run hello-world
-
+``` sh
+    $ sudo docker run hello-world
+```
 To install Docker compose, you can refer to this page: [Install Docker Compose]:
-
+``` sh
     $ curl -L https://github.com/docker/compose/releases/download/1.4.0/docker-compose-)\`uname -s\`-\`uname -m\` \> /usr/local/bin/docker-compose
-
     $ chmod +x /usr/local/bin/docker-compose
-
+```
   [DevStack - an OpenStack Community Production]: http://docs.openstack.org/developer/devstack/
   [DevStack Configuration]: http://docs.openstack.org/developer/devstack/configuration.html
   [Supported installation]: https://docs.docker.com/installation/
@@ -55,16 +49,15 @@ To install Docker compose, you can refer to this page: [Install Docker Compose]:
 Watcher containers
 ==================
 
-Containers orchestration templating is composed of 3 groups of
-containers, each group are independent:
+Containers orchestration templating is composed of 3 groups of containers, with following roles:
 
--   SERVICE\_DISCOVERY : containers providing an automatic service discovery tool, based on:
-     -   [consul]
+-   __SERVICE\_DISCOVERY__ : containers providing an automatic service discovery tool, based on:
+     -   [consul],
      -   [registrator]
 
--   WATCHER : containers providing a basic OpenStack identity Service and the Watcher modules (including Horizon plugin):
-     -   mariadb,
-     -   rabbitmq,
+-   __WATCHER__ : containers providing a basic OpenStack identity Service and the Watcher modules (including Horizon plugin):
+     -   [mariadb],
+     -   [rabbitmq],
      -   keystone,
      -   console,
      -   watcher-api,
@@ -72,30 +65,30 @@ containers, each group are independent:
      -   watcher-applier,
      -   horizon
 
--  METERING: containers providing a complete metering chain for Watcher:
-     -   riemann,
-     -   influxdb,
+-  __METERING__: containers providing a complete metering chain for Watcher:
+     -   [riemann],
+     -   [influxdb],
      -   nanoconfig-server,
      -   watcher-metering-publisher,
      -   watcher-metering-agent,
-     -   grafana
+     -   [grafana]
 
   [consul]: https://github.com/hashicorp/consul
   [registrator]: https://github.com/gliderlabs/registrator
-
+  [mariadb]: https://mariadb.org/
+  [rabbitmq]: https://www.rabbitmq.com/
+  [riemann]: http://riemann.io/
+  [influxdb]: https://influxdb.com/
+  [grafana]: http://grafana.org/
+  
 Run the Service Discovery tool
 ==============================
-
-Deploy the containers:
-
-    $ cd service-discovery
-    $ docker-compose up -d
-
-
+  Please see [README.md](service_discovery/README.md) 
+  
 Run the Watcher Service
 =======================
   Please see [README.md](watcher/README.md) 
 
-Run the Wathcer Metering Chain
+Run the Watcher Metering Chain
 ==============================
   Please see [README.md](metering/README.md) 
