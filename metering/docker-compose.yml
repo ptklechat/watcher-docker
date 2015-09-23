@@ -9,7 +9,7 @@ metering-agent:
   image: watcher/metering-agent:latest
   environment:
     # USE_NANOCONFIG_SERVICE: true
-    # NANOCONFIG_PROFILE: nanoconfig://watcher-metering-agent
+    # NANOCONFIG_AGENT_PROFILE: nanoconfig://watcher-metering-agent
     # NANOCONFIG_SERVICE_ENDPOINT: tcp://nanoconfig.service.watcher.b-com.com:10800
     # NANOCONFIG_UPDATE_ENDPOINT: tcp://nanoconfig.service.watcher.b-com.com:10900
     # PUBLISHER_ENDPOINT: tcp://watcher-metering-publisher.service.watcher.b-com.com:12345  
@@ -27,15 +27,15 @@ metering-publisher:
     SERVICE_12345_NAME: watcher-metering-publisher
     # METRICS_DATACENTER: watcher-ti-metering
     # USE_NANOCONFIG_SERVICE: true
-    # NANOCONFIG_PROFILE: nanoconfig://watcher-metering-agent
+    # NANOCONFIG_PUBLISHER_PROFILE: nanoconfig://watcher-metering-publisher
     # NANOCONFIG_SERVICE_ENDPOINT: tcp://nanoconfig.service.watcher.b-com.com:10800
     # NANOCONFIG_UPDATE_ENDPOINT: tcp://nanoconfig.service.watcher.b-com.com:10900
     # PUBLISHER_ENDPOINT: tcp://0.0.0.0:12345    
   extends:
     file: ../service_discovery/settings.yml
     service: registry-node
-  # ports:
-  #   - "12345:12345"
+    # ports:
+    #   - "12345:12345"
 
 nanoconfig-server:
   labels:
@@ -46,10 +46,12 @@ nanoconfig-server:
   environment:
     SERVICE_10800_NAME: nanoconfig
     SERVICE_10900_NAME: nanoconfig
-  # WATCHER_METERING_PUBLISHER_ENDPOINT: tcp://192.168.1.30:12345
-  # ports:
-  #   - "10800:10800"
-  #   - "10900:10900"
+    # NANOCONFIG_AGENT_PROFILE: nanoconfig://watcher-metering-agent
+    # NANOCONFIG_PUBLISHER_PROFILE: nanoconfig://watcher-metering-publisher
+    # WATCHER_METERING_PUBLISHER_ENDPOINT: tcp://192.168.1.30:12345
+    # ports:
+    #   - "10800:10800"
+    #   - "10900:10900"
   extends:
     file: ../service_discovery/settings.yml
     service: registry-node
